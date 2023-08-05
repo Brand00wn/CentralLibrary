@@ -30,6 +30,27 @@
             </header>
             <div class="container">
                 <main role="main" class="pb-3">
+                    @if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <div class="cta section container">
+                            <div class="cta-inner section-inner justify-content-center">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="cta-cta">
+                                        <div class="row">
+                                            <div class="col">
+                                                <a class="button button-primary" asp-action="BookShelf" asp-controller="Book">Book Shelf</a>
+                                            </div>
+
+                                            <div class="col">
+                                                <a class="button button-primary" asp-action="Management" asp-controller="Book">Book Registration</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
                     @RenderBody()
                 </main>
             </div>

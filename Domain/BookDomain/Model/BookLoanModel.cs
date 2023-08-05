@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.BookDomain.Model
 {
-    public class BookModel : Book
+    public class BookLoanModel : BookLoan
     {
-
     }
 }

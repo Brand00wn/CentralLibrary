@@ -3,7 +3,7 @@
 <div class="cta section container">
     <div class="cta-inner section-inner justify-content-center">
         <div class="row">
-            <form id="account" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <form id="account" asp-route-returnUrl="@Model.ReturnUrl" asp-action="Login" asp-controller="User" method="post">
                 <h2>Access our book collection</h2>
                 <hr />
                 <div class="form-group">
@@ -46,13 +46,7 @@
 
                     <div>
                         <p>
-                            <a class="blockquote-footer" id="forgot-password" asp-area="Identity" asp-page="/Account/ForgotPassword">Forgot your password?</a>
-                        </p>
-                        <p>
                             <a class="blockquote-footer" asp-controller="User" asp-action="Register">Register as a new user</a>
-                        </p>
-                        <p>
-                            <a class="blockquote-footer" id="resend-confirmation" asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">Resend email confirmation</a>
                         </p>
                     </div>
                 </div>

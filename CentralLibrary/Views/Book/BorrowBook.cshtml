@@ -1,0 +1,103 @@
+﻿@model CentralLibrary.ViewModels.Book.BorrowBookViewModel
+
+
+<div class="cta section container">
+    <div class="section-inner justify-content-center">
+        <div class="row">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" asp-action="RegisterBorrowBook" asp-controller="Book" method="post" class="row">
+                <div class="row">
+                    <h2 class="mt-0 col-7">See here more infos before borrow.</h2>
+                </div>
+
+                <hr />
+
+                <input type="hidden" asp-for="Book.Id" />
+
+                <div class="form-group">
+                    <div class="col-sm-3 pricing-inner section-inner">
+                        <div class="pricing-table-inner is-revealing">
+                            <div class="pricing-table-main">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                @if (Model.Book.CreationDate.Date.Equals(DateTime.Today.Date))
+                                {
+                                    <img class="card-img-top" src="~/img/newBook_bookCover.png" alt="@Model.Book.Title">
+                                }
+                                else
+                                {
+                                    <img class="card-img-top" src="~/img/default_bookCover.png" alt="@Model.Book.Title">
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @if (TempData.ContainsKey("SuccessMessage"))
+                        {
+                            <div class="alert alert-success">
+                                @TempData["SuccessMessage"]
+                            </div>
+                        }
+                        <div class="col">
+                            <label asp-for="Book.Title"></label>
+                            <input asp-for="Book.Title" class="form-control" autocomplete="new-password" aria-required="true" disabled />
+                            <span asp-validation-for="Book.Title" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Book.Author"></label>
+                            <input asp-for="Book.Author" class="form-control" autocomplete="new-password" aria-required="true" disabled />
+                            <span asp-validation-for="Book.Author" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="Book.ISBN"></label>
+                            <input asp-for="Book.ISBN" class="form-control" autocomplete="new-password" aria-required="true" disabled />
+                            <span asp-validation-for="Book.ISBN" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Book.Genre"></label>
+                            <input asp-for="Book.Genre" class="form-control" autocomplete="new-password" aria-required="true" disabled />
+                            <span asp-validation-for="Book.Genre" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="Book.Pages"></label>
+                            <input asp-for="Book.Pages" class="form-control" autocomplete="new-password" aria-required="true" disabled />
+                            <span asp-validation-for="Book.Pages" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="Book.PublicationDate"></label>
+                            <input asp-for="Book.PublicationDate" class="form-control" type="date" autocomplete="new-password" aria-required="true" disabled />
+                            <span asp-validation-for="Book.PublicationDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Book.Summary"></label>
+                            <textarea asp-for="Book.Summary" class="form-control" type="textarea" autocomplete="new-password" aria-required="true" disabled></textarea>
+                            <span asp-validation-for="Book.Summary" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <a id="borrowSubmit" asp-action="BookShelf" asp-controller="Book" class="w-100 btn btn-lg btn-secondary">Return to Book Shelf</a>
+                        </div>
+
+                        <div class="col">
+                            <button id="borrowSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Borrow Now!</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

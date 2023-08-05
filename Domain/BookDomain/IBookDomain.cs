@@ -12,5 +12,8 @@ namespace Domain.BookDomain
     {
         ICollection<BookModel> GetBooks();
         ICollection<BookModel> GetLastAddedBooks(int take);
+        Task Register(BookRegistrationModel model);
+        BookModel GetBook(int bookId);
+        Task<DateTime> Borrow(int bookId, string userId);
     }
 }

@@ -1,11 +1,16 @@
 ﻿@model CentralLibrary.ViewModels.Book.ManagementViewModel
 
 <div class="cta section container">
-    <div class="cta-inner section-inner justify-content-center">
+    <div class="section-inner justify-content-center">
         <div class="row">
-            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="row">
-                <h2>Add new book to collection.</h2>
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" asp-action="RegisterBook" asp-controller="Book" method="post" class="row">
+                <div class="row">
+                    <h2 class="mt-0 col-7">Add new book to collection.</h2>
+                    <span class="blockquote-footer col">(Search button brings Google Books data.)</span>
+                </div>
+
                 <hr />
+
                 <div class="form-group">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -32,13 +37,39 @@
                             <input asp-for="BookRegistration.Author" class="form-control" autocomplete="new-password" aria-required="true" />
                             <span asp-validation-for="BookRegistration.Author" class="text-danger"></span>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <div class="col">
                             <label asp-for="BookRegistration.ISBN"></label>
                             <input asp-for="BookRegistration.ISBN" class="form-control" autocomplete="new-password" aria-required="true" />
                             <span asp-validation-for="BookRegistration.ISBN" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Genre"></label>
+                            <input asp-for="BookRegistration.Genre" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.Genre" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="BookRegistration.Pages"></label>
+                            <input asp-for="BookRegistration.Pages" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.Pages" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="BookRegistration.PublicationDate"></label>
+                            <input asp-for="BookRegistration.PublicationDate" class="form-control" type="date" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.PublicationDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Summary"></label>
+                            <textarea asp-for="BookRegistration.Summary" class="form-control" type="textarea" autocomplete="new-password" aria-required="true"></textarea>
+                            <span asp-validation-for="BookRegistration.Summary" class="text-danger"></span>
                         </div>
                     </div>
 

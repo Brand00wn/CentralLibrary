@@ -1,4 +1,6 @@
+using AutoMapper;
 using Domain.BookDomain;
+using Domain.Helpers;
 using Domain.UserDomain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,13 @@ var configuration = new ConfigurationBuilder()
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
                 .Build();
 
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<AutoMapperProfiles>();
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
@@ -36,6 +45,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Services.AddScoped<IUserDomain, UserDomain>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBookDomain, BookDomain>();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation();

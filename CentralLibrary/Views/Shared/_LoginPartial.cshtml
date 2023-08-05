@@ -5,7 +5,7 @@
 
 <ul class="navbar-nav mt-0">
     <li class="nav-item">
-        <a class="nav-link text-white pt-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+        <a class="nav-link text-white pt-1">You're logged as <b>@User.Identity?.Name!</b></a>
     </li>
     <li class="nav-item">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

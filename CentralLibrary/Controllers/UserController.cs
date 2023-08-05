@@ -119,19 +119,20 @@ namespace CentralLibrary.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult LoginIndex()
         {
             LoginViewModel viewModel = new LoginViewModel();
 
             viewModel.ReturnUrl = "User/Login";
 
-            return View(viewModel);
+            return View("Login",viewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel viewModel, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+            viewModel.ReturnUrl = returnUrl;
 
             if (ModelState.IsValid)
             {
@@ -150,13 +151,13 @@ namespace CentralLibrary.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View();
+                    ModelState.AddModelError(string.Empty, "Username or password incorrect, try again.");
+                    return View("Login", viewModel);
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return View(viewModel.ReturnUrl);
         }
     }
 }

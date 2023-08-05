@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Entities
 {
-    public class BookLoan
+    public class BookLoan : IEntity
     {
         public int Id { get; set; }
         public int BookId { get; set; }

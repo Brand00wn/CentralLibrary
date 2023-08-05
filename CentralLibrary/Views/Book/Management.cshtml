@@ -1,0 +1,55 @@
+﻿@model CentralLibrary.ViewModels.Book.ManagementViewModel
+
+<div class="cta section container">
+    <div class="cta-inner section-inner justify-content-center">
+        <div class="row">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="row">
+                <h2>Add new book to collection.</h2>
+                <hr />
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Title"></label>
+                            <div class="input-group">
+
+                                <input asp-for="BookRegistration.Title" class="form-control" autocomplete="username" aria-required="true" />
+                                <span asp-validation-for="BookRegistration.Title" class="text-danger"></span>
+
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Author"></label>
+                            <input asp-for="BookRegistration.Author" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.Author" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.ISBN"></label>
+                            <input asp-for="BookRegistration.ISBN" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.ISBN" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register new book!</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,22 @@
+2023-08-04 02:28:11.220 -03:00 [INF] User created a new account with password.
+2023-08-04 11:29:07.251 -03:00 [INF] User created a new account with password.
+2023-08-04 11:32:04.080 -03:00 [INF] User created a new account with password.
+2023-08-04 11:40:18.221 -03:00 [INF] User created a new account with password.
+2023-08-04 12:00:13.840 -03:00 [ERR] System.InvalidOperationException: Cannot create a DbSet for 'User' because this type is not included in the model for the context.
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByNameAsync(String normalizedUserName, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByNameAsync(String userName)
+   at Microsoft.AspNetCore.Identity.UserValidator`1.ValidateUserName(UserManager`1 manager, TUser user, ICollection`1 errors)
+   at Microsoft.AspNetCore.Identity.UserValidator`1.ValidateAsync(UserManager`1 manager, TUser user)
+   at Microsoft.AspNetCore.Identity.UserManager`1.ValidateUserAsync(TUser user)
+   at Microsoft.AspNetCore.Identity.UserManager`1.UpdateUserAsync(TUser user)
+   at Microsoft.AspNetCore.Identity.UserManager`1.SetUserNameAsync(TUser user, String userName)
+   at Domain.UserDomain.UserDomain.CreateUser(RegisterModel model) in C:\Users\Amanda Mattos\source\repos\Brand00wn\CentralLibrary\Domain\UserDomain\UserDomain.cs:line 27
+2023-08-04 12:03:30.301 -03:00 [INF] User created a new account with password.
+2023-08-04 12:04:58.783 -03:00 [INF] User created a new account with password.
+2023-08-04 23:49:31.248 -03:00 [INF] User created a new account with password.

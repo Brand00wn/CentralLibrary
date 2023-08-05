@@ -1,0 +1,24 @@
+﻿
+<div class="row">
+    @foreach (var book in Model.books)
+    {
+        <div class="col-sm-3 pricing-inner section-inner">
+            <div class="pricing-table-inner is-revealing">
+                <div class="pricing-table-main">
+                    <img class="card-img-top" src="~/img/default_bookCover.png" alt="Card image">
+                    <div class="pricing-table-features-title text-xs pt-24">@book.Title</div>
+                    <ul class="list-reset text-xs">
+                        <li>
+                            <span>@book.Author</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pricing-table-cta mb-8 mt-3">
+                    <a class="button button-primary button-shadow button-block" href="#">I want this one</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

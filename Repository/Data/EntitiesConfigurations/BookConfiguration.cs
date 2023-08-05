@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Repository.Entities;
 using System;
@@ -24,6 +25,7 @@ namespace Repository.Data.EntitiesConfigurations
             builder.Property(l => l.Genre).HasMaxLength(50);
             builder.Property(l => l.Available).IsRequired();
             builder.Property(l => l.Summary).HasMaxLength(1000);
+            builder.Property(l => l.CreationDate).IsRequired().HasDefaultValueSql("GETDATE()").Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
             builder.HasMany(l => l.BookLoans)
                .WithOne(bl => bl.Book)

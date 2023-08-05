@@ -1,0 +1,67 @@
+﻿@model CentralLibrary.ViewModels.User.LoginViewModel
+
+<div class="cta section container">
+    <div class="cta-inner section-inner justify-content-center">
+        <div class="row">
+            <form id="account" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h2>Access our book collection</h2>
+                <hr />
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="checkbox">
+                                <label asp-for="RememberMe" class="form-label">
+                                    <input class="form-check-input" asp-for="RememberMe" />
+                                    @Html.DisplayNameFor(m => m.RememberMe)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                            <a id="return" asp-controller="Home" asp-action="Index" class="w-100 btn btn-lg btn-secondary mt-2">Return</a>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div>
+                        <p>
+                            <a class="blockquote-footer" id="forgot-password" asp-area="Identity" asp-page="/Account/ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a class="blockquote-footer" asp-controller="User" asp-action="Register">Register as a new user</a>
+                        </p>
+                        <p>
+                            <a class="blockquote-footer" id="resend-confirmation" asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">Resend email confirmation</a>
+                        </p>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

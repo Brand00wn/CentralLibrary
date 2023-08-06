@@ -6,6 +6,5 @@ namespace CentralLibrary.ViewModels.Book
     {
         public BookModel Book { get; set; }
         public string ReturnUrl { get; set; }
-        public DateTime DueDate { get; set; }
     }
 }

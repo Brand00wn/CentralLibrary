@@ -1,6 +1,5 @@
 ﻿@model CentralLibrary.ViewModels.Book.BorrowBookViewModel
 
-
 <div class="cta section container">
     <div class="section-inner justify-content-center">
         <div class="row">
@@ -14,13 +13,14 @@
                 <input type="hidden" asp-for="Book.Id" />
 
                 <div class="form-group">
+                <div class="form-group">
                     <div class="col-sm-3 pricing-inner section-inner">
                         <div class="pricing-table-inner is-revealing">
                             <div class="pricing-table-main">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                @if (Model.Book.CreationDate.Date.Equals(DateTime.Today.Date))
+                                @if (!string.IsNullOrEmpty(Model.Book.ImageUrl))
                                 {
-                                    <img class="card-img-top" src="~/img/newBook_bookCover.png" alt="@Model.Book.Title">
+                                    <img class="card-img-top" src="@Model.Book.ImageUrl" alt="@Model.Book.Title">
                                 }
                                 else
                                 {
@@ -81,7 +81,7 @@
                     <div class="row">
                         <div class="col">
                             <label asp-for="Book.Summary"></label>
-                            <textarea asp-for="Book.Summary" class="form-control" type="textarea" autocomplete="new-password" aria-required="true" disabled></textarea>
+                            <textarea asp-for="Book.Summary" class="form-control" type="textarea" rows="5" autocomplete="new-password" aria-required="true" disabled></textarea>
                             <span asp-validation-for="Book.Summary" class="text-danger"></span>
                         </div>
                     </div>

@@ -4,6 +4,6 @@ namespace CentralLibrary.ViewModels.Book
 {
     public class BorrowedBooksViewModel
     {
-        public List<BookModel> borrowedBooks { get; set; } = new List<BookModel>();
+        public List<BookModel> BorrowedBooks { get; set; } = new List<BookModel>();
     }
 }

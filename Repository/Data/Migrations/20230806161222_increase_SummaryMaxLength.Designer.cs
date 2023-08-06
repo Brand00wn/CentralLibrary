@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,10 @@ using Repository;
 namespace CentralLibrary.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230806161222_increase_SummaryMaxLength")]
+    partial class increase_SummaryMaxLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,8 +188,8 @@ namespace CentralLibrary.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ISBN")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -228,9 +230,6 @@ namespace CentralLibrary.Data.Migrations
 
                     b.Property<DateTime>("LoanDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("Received")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Returned")
                         .HasColumnType("bit");

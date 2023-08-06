@@ -23,22 +23,25 @@ namespace Domain.BookDomain
             _mapper = mapper;
         }
 
-        public ICollection<BookModel> GetBooks()
+        public List<BookModel> GetBooks()
         {
-            ICollection<BookModel> bookModel;
-            bookModel = _mapper.Map<ICollection<BookModel>>(_uow.BookRepository.GetAll()
-                .Include(i => i.BookLoans.Where(w => !w.Returned))
+            List<BookModel> bookModel = new List<BookModel>();
+
+            bookModel = _mapper.Map<List<BookModel>>(_uow.BookRepository.GetAll()
+                .Include(i => i.BookLoans.Where(w => !w.Received))
                 .ThenInclude(t => t.User)
                 .OrderBy(o => o.BookLoans.Count(bl => !bl.Returned))
-                .ThenBy(t => t.CreationDate).ToList());
+                .ThenBy(o => o.BookLoans.Count(bl => !bl.Received))
+                .ThenByDescending(t => t.CreationDate).ToList());
 
             return bookModel;
         }
 
-        public ICollection<BookModel> GetLastAddedBooks(int take)
+        public List<BookModel> GetLastAddedBooks(int take)
         {
-            ICollection<BookModel> bookModel;
-            bookModel = _mapper.Map<ICollection<BookModel>>(_uow.BookRepository.GetAll()
+            List<BookModel> bookModel = new List<BookModel>();
+
+            bookModel = _mapper.Map<List<BookModel>>(_uow.BookRepository.GetAll()
                 .OrderBy(o => o.CreationDate)
                 .Take(take)
                 .ToList());
@@ -49,6 +52,7 @@ namespace Domain.BookDomain
         public BookModel GetBook(int bookId)
         {
             BookModel bookModel = new BookModel();
+
             bookModel = _mapper.Map<BookModel>(_uow.BookRepository.GetAll()
                 .First(f => f.Id == bookId));
 
@@ -58,18 +62,28 @@ namespace Domain.BookDomain
         public async Task Register(BookRegistrationModel model)
         {
             Book book = _mapper.Map<Book>(model);
+
             _uow.BookRepository.Create(book);
+        }
+
+        public async Task Update(BookRegistrationModel model)
+        {
+            Book book = _mapper.Map<Book>(model);
+
+            _uow.BookRepository.Update(book);
         }
 
         public BorrowReturnModel Borrow(int bookId, string userId)
         {
             BorrowReturnModel returnModel = new BorrowReturnModel();
+
             var bookLoanByBookId = GetBookLoanByBookId(bookId);
             var book = GetBook(bookId);
 
-            if (bookLoanByBookId == null || bookLoanByBookId.Returned)
+            if (bookLoanByBookId == null || bookLoanByBookId.All(a => a.Returned))
             {
                 var dueDate = DateTime.Now.AddMonths(2);
+
                 BookLoanModel model = new BookLoanModel()
                 {
                     BookId = bookId,
@@ -88,23 +102,37 @@ namespace Domain.BookDomain
             else
             {
                 returnModel.Success = false;
-                returnModel.Message = $"This book is already borrowed, and will be available in {bookLoanByBookId?.DueDate}";
+                returnModel.Message = $"This book is already borrowed, and will be available in {bookLoanByBookId?.FirstOrDefault(w => !w.Returned)?.DueDate}";
             }
 
             return returnModel;
         }
 
-        public BookLoan GetBookLoanByBookId(int bookId)
+        public List<BookLoan> GetBookLoanByBookId(int bookId)
         {
-            return _uow.BookLoanRepository.GetAll().FirstOrDefault(f => f.BookId == bookId);
+            return _uow.BookLoanRepository.GetAll().Include(i => i.Book).Where(f => f.BookId == bookId).ToList();
         }
 
-        public List<BookModel> GetBorrowedBooks(string userId)
+        public List<BookModel> GetMyBorrowedBooks(string userId)
         {
             List<BookModel> bookModel = new List<BookModel>();
+
             bookModel = _mapper.Map<List<BookModel>>(_uow.BookRepository.GetAll()
                 .Include(i => i.BookLoans)
                 .Where(w => w.BookLoans.Count(bl => !bl.Returned) > 0 && w.BookLoans.All(w => w.UserId == userId)).ToList());
+
+            return bookModel;
+        }
+
+        public List<BookModel> GetBorrowedBooks()
+        {
+            List<BookModel> bookModel = new List<BookModel>();
+
+            bookModel = _mapper.Map<List<BookModel>>(_uow.BookRepository.GetAll()
+                .Include(i => i.BookLoans)
+                .ThenInclude(i => i.User)
+                .Where(w => w.BookLoans.Count(bl => !bl.Returned || !bl.Received) > 0).ToList());
+
 
             return bookModel;
         }
@@ -117,6 +145,25 @@ namespace Domain.BookDomain
             bookLoan.Returned = true;
 
             _uow.BookLoanRepository.Update(bookLoan);
+        }
+
+        public async Task Remove(int bookId)
+        {
+            await _uow.BookRepository.DeleteBook(bookId);
+        }
+
+        public BookLoanModel AcceptReceiving(int bookLoanId)
+        {
+            BookLoanModel bookLoanModel = new BookLoanModel();
+
+            var bookLoan = _uow.BookLoanRepository.GetAll().Include(i => i.Book).First(f => f.Id == bookLoanId);
+            bookLoanModel = _mapper.Map<BookLoanModel>(bookLoan);
+
+            bookLoan.Received = true;
+
+            _uow.BookLoanRepository.Update(bookLoan);
+
+            return bookLoanModel;
         }
     }
 }

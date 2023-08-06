@@ -15,7 +15,10 @@ namespace Domain.Helpers
         {
             CreateMap<BookRegistrationModel, Book>();
             CreateMap<Book, BookModel>();
+            CreateMap<BookModel, Book>();
             CreateMap<BookLoanModel, BookLoan>();
+            CreateMap<BookLoan, BookLoanModel>();
+            CreateMap<BookModel, BookRegistrationModel>();
         }
     }
 }

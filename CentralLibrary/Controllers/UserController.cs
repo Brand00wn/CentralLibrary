@@ -33,19 +33,20 @@ namespace CentralLibrary.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult RegisterIndex()
         {
-            return View(new RegisterViewModel() { ReturnUrl = "User/Register" });
+            return View("Register", new RegisterViewModel() { ReturnUrl = "User/Register" });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel viewModel, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+            viewModel.ReturnUrl = returnUrl;
 
             if (ModelState.IsValid)
             {
-                var result = await _userDomain.CreateUser(model);
+                var result = await _userDomain.CreateUser(viewModel);
 
                 if (result.IdentityResult.Succeeded)
                 {
@@ -54,18 +55,19 @@ namespace CentralLibrary.Controllers
                     var userId = await _userManager.GetUserIdAsync(result.User);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(result.User);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                     pageHandler: null,
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your email",
+                    await _emailSender.SendEmailAsync(viewModel.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToAction("RegisterConfirmation", new { email = model.Email, returnUrl = returnUrl });
+                        return RedirectToAction("RegisterConfirmation", new { email = viewModel.Email, returnUrl = returnUrl });
                     }
                     else
                     {
@@ -81,7 +83,7 @@ namespace CentralLibrary.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return View("Register", viewModel);
         }
 
         public async Task<IActionResult> RegisterConfirmation(string email, string returnUrl = null)
@@ -142,7 +144,7 @@ namespace CentralLibrary.Controllers
             {
                 TempData["ErrorRegisterMessage"] = "Error confirming your email.";
 
-                return RedirectToAction("Register");
+                return RedirectToAction("RegisterIndex");
             }
         }
 

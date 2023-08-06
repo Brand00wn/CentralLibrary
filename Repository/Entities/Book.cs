@@ -18,6 +18,7 @@ namespace Repository.Entities
         public bool Available { get; set; } = true;
         public string? Summary { get; set; }
         public DateTime CreationDate { get; set; }
+        public string ImageUrl { get; set; }
         public virtual ICollection<BookLoan> BookLoans { get; set; }
     }
 }

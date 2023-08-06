@@ -1,10 +1,12 @@
-﻿using CentralLibrary.ViewModels.Book;
+﻿using AutoMapper;
+using CentralLibrary.ViewModels.Book;
 using CentralLibrary.ViewModels.User;
 using Domain.BookDomain;
 using Domain.BookDomain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
+using Repository.Entities;
 using System.Data;
 using System.Security.Claims;
 
@@ -13,26 +15,34 @@ namespace CentralLibrary.Controllers
     [Authorize]
     public class BookController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly IBookDomain _bookDomain;
 
-        public BookController(IBookDomain bookDomain)
+        public BookController(IBookDomain bookDomain, IMapper mapper)
         {
             _bookDomain = bookDomain;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = "Reader, Admin")]
         public IActionResult BookShelf()
         {
             BookShelfViewModel viewModel = new BookShelfViewModel();
+
             viewModel.books.AddRange(_bookDomain.GetBooks());
 
             return View(viewModel);
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Management(ManagementViewModel viewModel)
+        public IActionResult Management(ManagementViewModel viewModel, int? bookId)
         {
             viewModel.ReturnUrl = "Book/BookShelf";
+
+            if (bookId.HasValue)
+            {
+                viewModel.BookRegistration = _mapper.Map<BookRegistrationModel>(_bookDomain.GetBook(bookId.Value));
+            }
 
             return View(viewModel);
         }
@@ -44,7 +54,16 @@ namespace CentralLibrary.Controllers
 
             if (ModelState.IsValid)
             {
-                await _bookDomain.Register(viewModel.BookRegistration);
+                if(viewModel.BookRegistration.Id > 0)
+                {
+                    await _bookDomain.Update(viewModel.BookRegistration);
+                    TempData["SuccessMessage"] = $"Book {viewModel.BookRegistration.Title} updated with success!";
+                }
+                else
+                {
+                    await _bookDomain.Register(viewModel.BookRegistration);
+                    TempData["SuccessMessage"] = $"Book {viewModel.BookRegistration.Title} registered with success!";
+                }
 
                 return RedirectToAction("BookShelf");
             }
@@ -63,6 +82,7 @@ namespace CentralLibrary.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Reader")]
         [HttpPost]
         public async Task<IActionResult> RegisterBorrowBook(BorrowBookViewModel viewModel, string returnUrl = null)
         {
@@ -82,16 +102,18 @@ namespace CentralLibrary.Controllers
         }
 
         [Authorize(Roles = "Reader")]
-        public async Task<IActionResult> BorrowedBooks()
+        public async Task<IActionResult> MyBorrowedBooks()
         {
             BorrowedBooksViewModel viewModel = new BorrowedBooksViewModel();
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            viewModel.borrowedBooks.AddRange(_bookDomain.GetBorrowedBooks(userId));
+            viewModel.BorrowedBooks.AddRange(_bookDomain.GetMyBorrowedBooks(userId));
 
-            return View(viewModel);
+            return View("BorrowedBooks", viewModel);
         }
-        
+
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GiveBackBook(int bookId)
         {
             var book = _bookDomain.GetBook(bookId);
@@ -101,7 +123,46 @@ namespace CentralLibrary.Controllers
 
             TempData["SuccessMessage"] = $"The book {book.Title} returned to the shelf. Thank you and hope you had a fantastic reading!";
 
-            return RedirectToAction("BorrowedBooks");
+            return RedirectToAction("MyBorrowedBooks");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveBook(int bookId)
+        {
+            var book = _bookDomain.GetBook(bookId);
+            var bookLoan = _bookDomain.GetBookLoanByBookId(bookId).FirstOrDefault(w => !w.Returned);
+
+            if(bookLoan != null)
+            {
+                TempData["ErrorMessage"] = $"The book {bookLoan.Book.Title} is borrowed, and you have to wait until {bookLoan.DueDate.ToShortDateString()} to delete it from the collection.";
+                return RedirectToAction("BookShelf");
+            }
+
+            await _bookDomain.Remove(bookId);
+
+            TempData["SuccessMessage"] = $"Book {book.Title} was deleted with success";
+
+            return RedirectToAction("BookShelf");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AcceptReceiving(int bookLoanId)
+        {
+            var bookLoan = _bookDomain.AcceptReceiving(bookLoanId);
+
+            TempData["SuccessMessage"] = $"Book {bookLoan.Book.Title} received!";
+
+            return RedirectToAction("BookShelf");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BorrowedBooks()
+        {
+            BorrowedBooksViewModel viewModel = new BorrowedBooksViewModel();
+
+            viewModel.BorrowedBooks.AddRange(_bookDomain.GetBorrowedBooks());
+
+            return View(viewModel);
         }
     }
 }

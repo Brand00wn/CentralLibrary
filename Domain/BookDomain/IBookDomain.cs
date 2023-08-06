@@ -10,12 +10,17 @@ namespace Domain.BookDomain
 {
     public interface IBookDomain
     {
-        ICollection<BookModel> GetBooks();
-        ICollection<BookModel> GetLastAddedBooks(int take);
+        List<BookModel> GetBooks();
+        List<BookModel> GetLastAddedBooks(int take);
         Task Register(BookRegistrationModel model);
         BookModel GetBook(int bookId);
         BorrowReturnModel Borrow(int bookId, string userId);
-        List<BookModel> GetBorrowedBooks(string userId);
+        List<BookModel> GetMyBorrowedBooks(string userId);
         Task GiveBackBook(int bookId, string userId);
+        List<BookLoan> GetBookLoanByBookId(int bookId);
+        Task Remove(int bookId);
+        Task Update(BookRegistrationModel model);
+        BookLoanModel AcceptReceiving(int bookLoanId);
+        List<BookModel> GetBorrowedBooks();
     }
 }

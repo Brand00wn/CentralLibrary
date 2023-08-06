@@ -10,6 +10,8 @@ namespace Domain.BookDomain.Model
 {
     public class BookRegistrationModel
     {
+        public int Id { get; set; }
+
         [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
@@ -29,5 +31,6 @@ namespace Domain.BookDomain.Model
         public string Genre { get; set; }
         [Display(Name = "Summary")]
         public string? Summary { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

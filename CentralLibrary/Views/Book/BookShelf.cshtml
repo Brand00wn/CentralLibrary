@@ -5,12 +5,14 @@
     {
         @foreach (var book in Model.books)
         {
+            var bookLoan = book.BookLoans.FirstOrDefault();
+
             <div class="col-sm-3 pricing-inner section-inner">
                 <div class="pricing-table-inner is-revealing">
                     <div class="pricing-table-main">
-                        @if (book.CreationDate.Date.Equals(DateTime.Today.Date))
+                        @if (!string.IsNullOrEmpty(book.ImageUrl))
                         {
-                            <img class="card-img-top" src="~/img/newBook_bookCover.png" alt="@book.Title">
+                            <img class="card-img-top" src="@book.ImageUrl" alt="@book.Title">
                         }
                         else
                         {
@@ -26,7 +28,7 @@
                     </div>
                     @if (User.IsInRole("Reader"))
                     {
-                        @if(book.BookLoans.Count <= 0)
+                        @if (book.BookLoans.Count <= 0)
                         {
                             <div class="pricing-table-cta mb-8 mt-3">
                                 <a class="button button-primary button-shadow button-block" asp-action="BorrowBook" asp-controller="Book" asp-route-bookId="@book.Id">I want this one</a>
@@ -35,25 +37,34 @@
                         else
                         {
                             <div class="pricing-table-cta mb-8 mt-3">
-                                <a class="button button-block button-shadow button-block" disabled>Available in @book.BookLoans.First().DueDate.ToShortDateString()</a>
+                                <a class="button button-block button-shadow button-block" disabled>Available in @bookLoan.DueDate.ToShortDateString()</a>
                             </div>
                         }
                     }
 
                     @if (User.IsInRole("Admin"))
                     {
-                        @if (book.BookLoans.Count <= 0)
-                        {
-                            <div class="pricing-table-cta mb-8 mt-3">
-                                <a class="button button-primary button-shadow button-block" disabled>Available</a>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="pricing-table-cta mb-8 mt-3">
-                                <a class="button button-block button-shadow button-block" disabled>With @book.BookLoans.First().User.UserName</a>
-                            </div>
-                        }
+                        <div class="pricing-table-cta mb-8 mt-3">
+                            @if (book.BookLoans.Count <= 0)
+                            {
+                                <a class="button button-primary button-shadow button-block col mr-5" disabled>Available</a>
+                            }
+                            else
+                            {
+                                <div class="pricing-table-features-title text-xs pt-24">@bookLoan.User.UserName</div>
+
+                                @if (book.BookLoans.Count(c => !c.Returned) > 0)
+                                {
+                                    <a class="button button-block button-shadow button-block" disabled>Due date @book.BookLoans.First().DueDate.ToShortDateString()</a>
+                                }
+                                else
+                                {
+                                    <a class="button button-block bg-warning button-shadow button-block" asp-action="AcceptReceiving" asp-controller="Book" asp-route-bookLoanId="@bookLoan.Id" disabled>Accept Receiving</a>
+                                }
+                            }
+                            <a class="button bg-success button-shadow button-block col mt-2" asp-action="Management" asp-controller="Book" asp-route-bookId="@book.Id">Edit Book</a>
+                            <a class="button bg-danger button-shadow button-block mt-2" asp-action="RemoveBook" asp-controller="Book" asp-route-bookId="@book.Id">Remove</a>
+                        </div>
                     }
                 </div>
             </div>

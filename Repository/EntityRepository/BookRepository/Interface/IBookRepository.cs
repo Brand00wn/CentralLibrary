@@ -9,6 +9,6 @@ namespace Repository.EntityRepository.BookRepository.Interface
 {
     public interface IBookRepository : IGenericRepository<Book>
     {
-
+        Task DeleteBook(int bookId);
     }
 }

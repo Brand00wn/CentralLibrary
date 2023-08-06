@@ -19,12 +19,12 @@ namespace Repository.Data.EntitiesConfigurations
 
             builder.Property(l => l.Title).IsRequired().HasMaxLength(300);
             builder.Property(l => l.Author).IsRequired().HasMaxLength(100);
-            builder.Property(l => l.ISBN).HasMaxLength(13);
+            builder.Property(l => l.ISBN).HasMaxLength(50);
             builder.Property(l => l.PublicationDate).IsRequired();
             builder.Property(l => l.Pages).IsRequired();
             builder.Property(l => l.Genre).HasMaxLength(50);
             builder.Property(l => l.Available).IsRequired();
-            builder.Property(l => l.Summary).HasMaxLength(1000);
+            builder.Property(l => l.Summary).HasColumnType("nvarchar(max)");
             builder.Property(l => l.CreationDate).IsRequired().HasDefaultValueSql("GETDATE()").Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
             builder.HasMany(l => l.BookLoans)

@@ -24,18 +24,7 @@ namespace CentralLibrary.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var usuario = await _userManager.GetUserAsync(User);
-                if (await _userManager.IsInRoleAsync(usuario, "Admin"))
-                {
-                    ManagementViewModel managementViewModel = new ManagementViewModel();
-                    managementViewModel.ReturnUrl = "Book/BookRegistration";
-
-                    return RedirectToAction("Management", "Book", managementViewModel);
-                }
-                else
-                {
-                    return RedirectToAction("BookShelf", "Book");
-                }
+                return RedirectToAction("BookShelf", "Book");
             }
             else
             {

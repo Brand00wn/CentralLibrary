@@ -17,5 +17,6 @@ namespace Repository.Entities
         public DateTime LoanDate { get; set; }
         public DateTime DueDate { get; set; }
         public bool Returned { get; set; }
+        public bool Received { get; set; }
     }
 }

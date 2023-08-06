@@ -46,7 +46,7 @@ namespace CentralLibrary.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _userDomain.CreateUser(model);
-                
+
                 if (result.IdentityResult.Succeeded)
                 {
                     Log.Information("User created a new account with password.");
@@ -108,14 +108,42 @@ namespace CentralLibrary.Controllers
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                viewModel.EmailConfirmationUrl = Url.Page(
-                    "/Account/ConfirmEmail",
-                    pageHandler: null,
-                    values: new { area = "Identity", userId, code, returnUrl },
-                    protocol: Request.Scheme);
+
+                viewModel.UserId = userId;
+                viewModel.Code = code;
             }
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return RedirectToPage("/Index");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{userId}'.");
+            }
+
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (result.Succeeded)
+            {
+                TempData["SuccessLoginMessage"] = "Thank you for confirming your email. Now you can Log in.";
+
+                return RedirectToAction("LoginIndex");
+            }
+            else
+            {
+                TempData["ErrorRegisterMessage"] = "Error confirming your email.";
+
+                return RedirectToAction("Register");
+            }
         }
 
         [HttpGet]
@@ -125,7 +153,7 @@ namespace CentralLibrary.Controllers
 
             viewModel.ReturnUrl = "User/Login";
 
-            return View("Login",viewModel);
+            return View("Login", viewModel);
         }
 
         [HttpPost]

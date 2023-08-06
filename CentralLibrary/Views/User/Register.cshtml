@@ -3,19 +3,17 @@
 <div class="cta section container">
     <div class="cta-inner section-inner justify-content-center">
         <div class="row">
+            @if (TempData.ContainsKey("ErrorRegisterMessage"))
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorRegisterMessage"]
+                </div>
+            }
             <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                 <h2>Create a new account.</h2>
                 <hr />
                 <div class="form-group">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    <div class="row">
-                        <div class="col">
-                            <label asp-for="UserName"></label>
-                            <input asp-for="UserName" class="form-control" autocomplete="new-name" aria-required="true" />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col">

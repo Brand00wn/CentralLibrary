@@ -10,5 +10,6 @@ namespace Repository.UnitOfWork
     public interface IUnitOfWork
     {
         IBookRepository BookRepository { get; }
+        IBookLoanRepository BookLoanRepository { get; }
     }
 }

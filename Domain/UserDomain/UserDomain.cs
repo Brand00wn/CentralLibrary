@@ -24,7 +24,7 @@ namespace Domain.UserDomain
             try
             {
                 var user = Activator.CreateInstance<User>();
-                await _userManager.SetUserNameAsync(user, model.UserName);
+                await _userManager.SetUserNameAsync(user, model.Email);
                 await _userManager.SetEmailAsync(user, model.Email);
                 var identityResult = await _userManager.CreateAsync(user, model.Password);
 

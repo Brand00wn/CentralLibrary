@@ -34,10 +34,7 @@ namespace CentralLibrary.Controllers
                 }
                 else
                 {
-                    BookShelfViewModel bookShelfViewModel = new BookShelfViewModel();
-                    bookShelfViewModel.books.AddRange(_bookDomain.GetBooks());
-
-                    return RedirectToAction("BookShelf", "Book", bookShelfViewModel);
+                    return RedirectToAction("BookShelf", "Book");
                 }
             }
             else

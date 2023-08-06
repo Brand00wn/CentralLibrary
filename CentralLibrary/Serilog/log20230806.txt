@@ -1,0 +1,17 @@
+2023-08-06 00:07:01.468 -03:00 [INF] User logged in.
+2023-08-06 01:18:51.985 -03:00 [INF] User logged in.
+2023-08-06 01:19:10.708 -03:00 [INF] User logged in.
+2023-08-06 01:19:43.546 -03:00 [INF] User logged in.
+2023-08-06 01:20:15.713 -03:00 [INF] User logged in.
+2023-08-06 01:31:53.594 -03:00 [INF] User created a new account with password.
+2023-08-06 01:33:56.251 -03:00 [INF] User created a new account with password.
+2023-08-06 01:36:06.144 -03:00 [INF] User created a new account with password.
+2023-08-06 01:49:49.764 -03:00 [INF] User created a new account with password.
+2023-08-06 01:51:05.697 -03:00 [INF] User created a new account with password.
+2023-08-06 01:52:58.834 -03:00 [INF] User created a new account with password.
+2023-08-06 01:57:38.538 -03:00 [INF] User created a new account with password.
+2023-08-06 01:58:57.725 -03:00 [INF] User created a new account with password.
+2023-08-06 01:59:58.017 -03:00 [INF] User created a new account with password.
+2023-08-06 02:00:34.860 -03:00 [INF] User logged in.
+2023-08-06 02:16:45.294 -03:00 [INF] User logged in.
+2023-08-06 02:38:56.102 -03:00 [INF] User logged in.

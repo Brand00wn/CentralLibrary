@@ -26,9 +26,34 @@
                     </div>
                     @if (User.IsInRole("Reader"))
                     {
-                        <div class="pricing-table-cta mb-8 mt-3">
-                            <a class="button button-primary button-shadow button-block" asp-action="BorrowBook" asp-controller="Book" asp-route-bookId="@book.Id">I want this one</a>
-                        </div>
+                        @if(book.BookLoans.Count <= 0)
+                        {
+                            <div class="pricing-table-cta mb-8 mt-3">
+                                <a class="button button-primary button-shadow button-block" asp-action="BorrowBook" asp-controller="Book" asp-route-bookId="@book.Id">I want this one</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="pricing-table-cta mb-8 mt-3">
+                                <a class="button button-block button-shadow button-block" disabled>Available in @book.BookLoans.First().DueDate.ToShortDateString()</a>
+                            </div>
+                        }
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @if (book.BookLoans.Count <= 0)
+                        {
+                            <div class="pricing-table-cta mb-8 mt-3">
+                                <a class="button button-primary button-shadow button-block" disabled>Available</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="pricing-table-cta mb-8 mt-3">
+                                <a class="button button-block button-shadow button-block" disabled>With @book.BookLoans.First().User.UserName</a>
+                            </div>
+                        }
                     }
                 </div>
             </div>

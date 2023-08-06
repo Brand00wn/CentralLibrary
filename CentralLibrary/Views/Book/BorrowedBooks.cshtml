@@ -1,0 +1,52 @@
+﻿@model CentralLibrary.ViewModels.Book.BorrowedBooksViewModel
+
+<div class="row">
+    @if (Model.borrowedBooks.Count > 0)
+    {
+        @foreach (var book in Model.borrowedBooks)
+        {
+            <div class="col-sm-3 pricing-inner section-inner">
+                <div class="pricing-table-inner is-revealing">
+                    <div class="pricing-table-main">
+                        @if (book.CreationDate.Date.Equals(DateTime.Today.Date))
+                        {
+                            <img class="card-img-top" src="~/img/newBook_bookCover.png" alt="@book.Title">
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="~/img/default_bookCover.png" alt="@book.Title">
+                        }
+
+                        <div class="pricing-table-features-title text-xs pt-24">@book.Title</div>
+                        <ul class="list-reset text-xs">
+                            <li>
+                                <span>@book.Author</span>
+                            </li>
+                        </ul>
+                    </div>
+                    @if (User.IsInRole("Reader"))
+                    {
+                        <div class="pricing-table-cta mb-8 mt-3">
+                            <a class="button button-primary button-shadow button-block" asp-action="GiveBackBook" asp-controller="Book" asp-route-bookId="@book.Id">Give back</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+    }
+    else
+    {
+        <div class="cta section container">
+            <div class="section-inner justify-content-center">
+                <div class="row">
+                    <h2 class="mt-0 col-7">You don't borrow any book yet.</h2>
+                    <a class="button button-primary button-shadow button-block col" asp-action="BookShelf" asp-controller="Book">Click here to borrow one.</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+

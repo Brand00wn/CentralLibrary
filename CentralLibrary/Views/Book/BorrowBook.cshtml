@@ -31,10 +31,10 @@
                     </div>
 
                     <div class="row">
-                        @if (TempData.ContainsKey("SuccessMessage"))
+                        @if (TempData.ContainsKey("ErrorBorrowMessage"))
                         {
-                            <div class="alert alert-success">
-                                @TempData["SuccessMessage"]
+                            <div class="alert alert-danger">
+                                @TempData["ErrorBorrowMessage"]
                             </div>
                         }
                         <div class="col">

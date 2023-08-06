@@ -14,6 +14,7 @@ namespace Repository.UnitOfWork
         private bool _disposed = false;
 
         private IBookRepository _bookRepository;
+        private IBookLoanRepository _bookLoanRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -21,6 +22,7 @@ namespace Repository.UnitOfWork
         }
 
         public IBookRepository BookRepository { get => _bookRepository ?? (_bookRepository = new BookRepository(_context)); }
+        public IBookLoanRepository BookLoanRepository { get => _bookLoanRepository ?? (_bookLoanRepository = new BookLoanRepository(_context)); }
 
         protected virtual void Dispose(bool disposing)
         {

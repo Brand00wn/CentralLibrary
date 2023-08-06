@@ -17,7 +17,7 @@ namespace CentralLibrary.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.13")
+                .HasAnnotation("ProductVersion", "6.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -175,14 +175,23 @@ namespace CentralLibrary.Data.Migrations
                     b.Property<bool>("Available")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.Property<string>("Genre")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ISBN")
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Pages")
                         .HasColumnType("int");
@@ -191,8 +200,7 @@ namespace CentralLibrary.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Summary")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -220,6 +228,9 @@ namespace CentralLibrary.Data.Migrations
 
                     b.Property<DateTime>("LoanDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Received")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Returned")
                         .HasColumnType("bit");

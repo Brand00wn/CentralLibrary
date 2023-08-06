@@ -1,7 +1,12 @@
+using AutoMapper;
+using Domain.BookDomain;
+using Domain.Helpers;
+using Domain.UserDomain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Repository.Entities;
+using Repository.UnitOfWork;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +18,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
 
@@ -23,11 +30,25 @@ var configuration = new ConfigurationBuilder()
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
                 .Build();
 
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<AutoMapperProfiles>();
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
 
+// Dependency Injection
+builder.Services.AddScoped<IUserDomain, UserDomain>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IBookDomain, BookDomain>();
+builder.Services.AddSingleton(mapper);
 
+builder.Services.AddRazorPages()
+    .AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 

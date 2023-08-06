@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Entities
 {
-    public class BookLoan
+    public class BookLoan : IEntity
     {
         public int Id { get; set; }
         public int BookId { get; set; }
@@ -17,5 +17,6 @@ namespace Repository.Entities
         public DateTime LoanDate { get; set; }
         public DateTime DueDate { get; set; }
         public bool Returned { get; set; }
+        public bool Received { get; set; }
     }
 }

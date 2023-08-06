@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Repository.Entities
+@inject SignInManager<User> SignInManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,45 +9,87 @@
     <title>@ViewData["Title"] - CentralLibrary</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CentralLibrary.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/dist/css/style.css">
+    <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CentralLibrary</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+<body class="is-boxed has-animations">
+    <div class="body-wrap">
+        <section class="hero pt-0">
+            <header class="site-header">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3">
+                        <div class="container-fluid justify-content-end">
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </nav>
+                }
+            </header>
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @if(User.Identity.IsAuthenticated)
+                    {
+                        @if (TempData.ContainsKey("SuccessMessage"))
+                        {
+                            <div class="alert alert-success">
+                                @TempData["SuccessMessage"]
+                            </div>
+                        }
+                        @if (TempData.ContainsKey("ErrorMessage"))
+                        {
+                            <div class="alert alert-danger">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+                        <div class="cta section container">
+                            <div class="cta-inner section-inner justify-content-center">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="cta-cta">
+                                        <div class="row">
+                                            <div class="col">
+                                                <a class="button button-primary" asp-action="BookShelf" asp-controller="Book">Book Shelf</a>
+                                            </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - CentralLibrary - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+                                            <div class="col">
+                                                <a class="button button-primary" asp-action="Management" asp-controller="Book">Book Registration</a>
+                                            </div>
+
+                                            <div class="col">
+                                                <a class="button button-primary" asp-action="BorrowedBooks" asp-controller="Book">Borrowed Books</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (User.IsInRole("Reader"))
+                                {
+                                    <div class="cta-cta">
+                                        <div class="row">
+                                            <div class="col">
+                                                <a class="button button-primary" asp-action="BookShelf" asp-controller="Book">Book Shelf</a>
+                                            </div>
+
+                                            <div class="col">
+                                                <a class="button button-primary" asp-action="MyBorrowedBooks" asp-controller="Book">My Borrowed Books</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    @RenderBody()
+                </main>
+            </div>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            @await RenderSectionAsync("Scripts", required: false)
+        </section>
+    </div>
 </body>
 </html>

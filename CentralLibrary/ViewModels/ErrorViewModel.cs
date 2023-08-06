@@ -1,4 +1,4 @@
-namespace CentralLibrary.Models
+namespace CentralLibrary.ViewModels
 {
     public class ErrorViewModel
     {

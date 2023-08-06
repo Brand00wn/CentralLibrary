@@ -1,0 +1,91 @@
+﻿@model CentralLibrary.ViewModels.Book.BookShelfViewModel
+
+<div class="row">
+    @if (Model.books.Count > 0)
+    {
+        @foreach (var book in Model.books)
+        {
+            var bookLoan = book.BookLoans.FirstOrDefault();
+
+            <div class="col-sm-3 pricing-inner section-inner">
+                <div class="pricing-table-inner is-revealing">
+                    <div class="pricing-table-main">
+                        @if (!string.IsNullOrEmpty(book.ImageUrl))
+                        {
+                            <img class="card-img-top" src="@book.ImageUrl" alt="@book.Title">
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="~/img/default_bookCover.png" alt="@book.Title">
+                        }
+
+                        <div class="pricing-table-features-title text-xs pt-24">@book.Title</div>
+                        <ul class="list-reset text-xs">
+                            <li>
+                                <span>@book.Author</span>
+                            </li>
+                        </ul>
+                    </div>
+                    @if (User.IsInRole("Reader"))
+                    {
+                        @if (book.BookLoans.Count <= 0)
+                        {
+                            <div class="pricing-table-cta mb-8 mt-3">
+                                <a class="button button-primary button-shadow button-block" asp-action="BorrowBook" asp-controller="Book" asp-route-bookId="@book.Id">I want this one</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="pricing-table-cta mb-8 mt-3">
+                                <a class="button button-block button-shadow button-block" disabled>Available in @bookLoan.DueDate.ToShortDateString()</a>
+                            </div>
+                        }
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="pricing-table-cta mb-8 mt-3">
+                            @if (book.BookLoans.Count <= 0)
+                            {
+                                <a class="button button-primary button-shadow button-block col mr-5" disabled>Available</a>
+                            }
+                            else
+                            {
+                                <div class="pricing-table-features-title text-xs pt-24">@bookLoan.User.UserName</div>
+
+                                @if (book.BookLoans.Count(c => !c.Returned) > 0)
+                                {
+                                    <a class="button button-block button-shadow button-block" disabled>Due date @book.BookLoans.First().DueDate.ToShortDateString()</a>
+                                }
+                                else
+                                {
+                                    <a class="button button-block bg-warning button-shadow button-block" asp-action="AcceptReceiving" asp-controller="Book" asp-route-bookLoanId="@bookLoan.Id" disabled>Accept Receiving</a>
+                                }
+                            }
+                            <a class="button bg-success button-shadow button-block col mt-2" asp-action="Management" asp-controller="Book" asp-route-bookId="@book.Id">Edit Book</a>
+                            <a class="button bg-danger button-shadow button-block mt-2" asp-action="RemoveBook" asp-controller="Book" asp-route-bookId="@book.Id">Remove</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+    }
+    else
+    {
+        <div class="cta section container">
+            <div class="section-inner justify-content-center">
+                <div class="row">
+                    <h2 class="mt-0 col-7">There is no book registered yet.</h2>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="button button-primary button-shadow button-block col" asp-action="Management" asp-controller="Book">Click here to register one.</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+

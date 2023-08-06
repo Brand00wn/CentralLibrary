@@ -1,0 +1,120 @@
+﻿@model CentralLibrary.ViewModels.Book.ManagementViewModel
+
+<div class="cta section container">
+    <div class="section-inner justify-content-center">
+        <div class="row">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" asp-action="RegisterBook" asp-controller="Book" method="post" class="row">
+                <div class="row">
+                    @if (Model.BookRegistration != null)
+                    {
+                        <h2 class="mt-0 col-7">Editting book @Model.BookRegistration.Title</h2>
+                    }
+                    else
+                    {
+                        <h2 class="mt-0 col-7">Add new book to collection.</h2>
+                    }
+                    <span class="blockquote-footer col">(Search button brings Google Books data.)</span>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-sm-3 pricing-inner section-inner">
+                        <div class="pricing-table-inner is-revealing">
+                            <div class="pricing-table-main">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="BookRegistration.Id" />
+                                <input type="hidden" asp-for="BookRegistration.ImageUrl" />
+
+                                @if (Model.BookRegistration != null)
+                                {
+                                    <img class="card-img-top bookImageRegistration" src="@Model.BookRegistration.ImageUrl">
+                                }
+                                else
+                                {
+                                    <img class="card-img-top bookImageRegistration" src="~/img/default_bookCover.png">
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Title"></label>
+                            <div class="input-group">
+
+                                <input asp-for="BookRegistration.Title" class="form-control" autocomplete="username" aria-required="true" />
+                                <span asp-validation-for="BookRegistration.Title" class="text-danger"></span>
+
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" id="getGoogleBooksData" type="button">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Author"></label>
+                            <input asp-for="BookRegistration.Author" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.Author" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="BookRegistration.ISBN"></label>
+                            <input asp-for="BookRegistration.ISBN" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.ISBN" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Genre"></label>
+                            <input asp-for="BookRegistration.Genre" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.Genre" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="BookRegistration.Pages"></label>
+                            <input asp-for="BookRegistration.Pages" class="form-control" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.Pages" class="text-danger"></span>
+                        </div>
+
+                        <div class="col">
+                            <label asp-for="BookRegistration.PublicationDate"></label>
+                            <input asp-for="BookRegistration.PublicationDate" class="form-control" type="date" autocomplete="new-password" aria-required="true" />
+                            <span asp-validation-for="BookRegistration.PublicationDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="BookRegistration.Summary"></label>
+                            <textarea asp-for="BookRegistration.Summary" class="form-control" type="textarea" rows="5" autocomplete="new-password" aria-required="true"></textarea>
+                            <span asp-validation-for="BookRegistration.Summary" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            @if (Model.BookRegistration != null)
+                            {
+                                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Edit book!</button>
+                            }
+                            else
+                            {
+                                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register new book!</button>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

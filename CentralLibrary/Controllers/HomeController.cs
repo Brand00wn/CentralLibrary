@@ -1,21 +1,35 @@
-﻿using CentralLibrary.Models;
+﻿using CentralLibrary.ViewModels;
+using CentralLibrary.ViewModels.Book;
+using Domain.BookDomain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Entities;
 using System.Diagnostics;
 
 namespace CentralLibrary.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IBookDomain _bookDomain;
+        private readonly UserManager<User> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IBookDomain bookDomain, UserManager<User> userManager)
         {
-            _logger = logger;
+            _bookDomain = bookDomain;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("BookShelf", "Book");
+            }
+            else
+            {
+                return View("Index");
+            }
         }
 
         public IActionResult Privacy()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Entities
 {
-    public class Book
+    public class Book : IEntity
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -15,8 +15,10 @@ namespace Repository.Entities
         public DateTime PublicationDate { get; set; }
         public int Pages { get; set; }
         public string Genre { get; set; }
-        public bool Available { get; set; }
+        public bool Available { get; set; } = true;
         public string? Summary { get; set; }
+        public DateTime CreationDate { get; set; }
+        public string ImageUrl { get; set; }
         public virtual ICollection<BookLoan> BookLoans { get; set; }
     }
 }

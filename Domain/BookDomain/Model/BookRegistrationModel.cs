@@ -10,7 +10,7 @@ namespace Domain.BookDomain.Model
 {
     public class BookRegistrationModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
         [Display(Name = "Title")]
